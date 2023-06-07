@@ -8,7 +8,7 @@ format:
     toc: true
 
 website:
-    page-navigation: true
+  page-navigation: true
   twitter-card: false
   open-graph: true
   repo-actions: [issue]
