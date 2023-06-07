@@ -15,7 +15,7 @@ website:
   navbar:
     background: primary
     search: true
-   right: 
+    right: 
       - icon: github
         href: "https://github.com/fligt/revigo-spectra"
   sidebar:
