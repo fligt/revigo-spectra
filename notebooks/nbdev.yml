@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "revigo-spectra"
+  site-url: "https://fligt.github.io/revigo-spectra"
+  description: "Spectral reflectance data and Kubelka-Munk analysis of Revigo project paints"
+  repo-branch: master
+  repo-url: "https://github.com/fligt/revigo-spectra"
