@@ -7,6 +7,8 @@ Welcome to `revigo-spectra`
 
 **About the Revigo project.**
 
+<img width=50% src="./images/eosine.jpg">
+
 ## Cite
 
 You are free to make use of the data and code in this repository. If you
