@@ -7,7 +7,7 @@ Welcome to `revigo-spectra`
 
 **About the Revigo project.**
 
-<img width=50% src="./images/eosine.jpg">
+<img width=50% src="./images/eosine.png">
 
 ## Cite
 
