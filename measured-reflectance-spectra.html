@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.361">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Data preparations">
+
+<title>revigo-spectra - Reflectance spectra</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./kmfit.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="revigo-spectra - Reflectance spectra">
+<meta property="og:description" content="Data preparations">
+<meta property="og:site-name" content="revigo-spectra">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">revigo-spectra</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/fligt/revigo-spectra" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./measured-reflectance-spectra.html">Reflectance spectra</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome to <code>revigo-spectra</code></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./measured-reflectance-spectra.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Reflectance spectra</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./kmfit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kubelka-Munk analysis of paint reflectance spectra</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Reflectance spectra</h1>
+</div>
+
+<div>
+  <div class="description">
+    Data preparations
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!-- WARNING: THIS FILE WAS AUTOGENERATED! DO NOT EDIT! -->
+<p>During the Revigo project, we created</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>spectra<span class="op">=</span> pd.read_csv(<span class="st">'../data/revigo-aggregated-palette-spectral-data.txt'</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>, index_col<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>mixture_specs <span class="op">=</span> pd.read_csv(<span class="st">'../data/revigo-mixture-specifications.txt'</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>, index_col<span class="op">=</span><span class="dv">0</span>, header<span class="op">=</span><span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>spectra</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">400</th>
+<th data-quarto-table-cell-role="th">410</th>
+<th data-quarto-table-cell-role="th">420</th>
+<th data-quarto-table-cell-role="th">430</th>
+<th data-quarto-table-cell-role="th">440</th>
+<th data-quarto-table-cell-role="th">450</th>
+<th data-quarto-table-cell-role="th">460</th>
+<th data-quarto-table-cell-role="th">470</th>
+<th data-quarto-table-cell-role="th">480</th>
+<th data-quarto-table-cell-role="th">490</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">610</th>
+<th data-quarto-table-cell-role="th">620</th>
+<th data-quarto-table-cell-role="th">630</th>
+<th data-quarto-table-cell-role="th">640</th>
+<th data-quarto-table-cell-role="th">650</th>
+<th data-quarto-table-cell-role="th">660</th>
+<th data-quarto-table-cell-role="th">670</th>
+<th data-quarto-table-cell-role="th">680</th>
+<th data-quarto-table-cell-role="th">690</th>
+<th data-quarto-table-cell-role="th">700</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Name</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">01A_b</td>
+<td>5.09</td>
+<td>5.09</td>
+<td>5.04</td>
+<td>5.00</td>
+<td>5.00</td>
+<td>4.97</td>
+<td>4.97</td>
+<td>4.93</td>
+<td>4.92</td>
+<td>4.92</td>
+<td>...</td>
+<td>4.91</td>
+<td>4.92</td>
+<td>4.90</td>
+<td>4.92</td>
+<td>4.90</td>
+<td>4.90</td>
+<td>4.89</td>
+<td>4.93</td>
+<td>4.91</td>
+<td>4.93</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">01A_ob</td>
+<td>4.44</td>
+<td>4.43</td>
+<td>4.39</td>
+<td>4.38</td>
+<td>4.35</td>
+<td>4.30</td>
+<td>4.28</td>
+<td>4.21</td>
+<td>4.18</td>
+<td>4.17</td>
+<td>...</td>
+<td>5.29</td>
+<td>5.21</td>
+<td>5.14</td>
+<td>5.11</td>
+<td>5.05</td>
+<td>5.02</td>
+<td>5.00</td>
+<td>4.98</td>
+<td>4.96</td>
+<td>4.97</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">01A_ow</td>
+<td>6.73</td>
+<td>7.97</td>
+<td>8.59</td>
+<td>8.94</td>
+<td>8.54</td>
+<td>7.24</td>
+<td>5.90</td>
+<td>4.87</td>
+<td>4.37</td>
+<td>4.20</td>
+<td>...</td>
+<td>78.19</td>
+<td>79.58</td>
+<td>80.69</td>
+<td>81.99</td>
+<td>82.92</td>
+<td>83.78</td>
+<td>84.35</td>
+<td>84.74</td>
+<td>84.98</td>
+<td>85.39</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">01A_w</td>
+<td>54.83</td>
+<td>72.98</td>
+<td>78.39</td>
+<td>80.16</td>
+<td>81.59</td>
+<td>82.46</td>
+<td>83.58</td>
+<td>83.99</td>
+<td>84.73</td>
+<td>85.18</td>
+<td>...</td>
+<td>85.84</td>
+<td>86.11</td>
+<td>86.53</td>
+<td>87.28</td>
+<td>87.75</td>
+<td>88.20</td>
+<td>88.47</td>
+<td>88.64</td>
+<td>88.56</td>
+<td>88.75</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">01B_b</td>
+<td>5.19</td>
+<td>5.18</td>
+<td>5.12</td>
+<td>5.10</td>
+<td>5.06</td>
+<td>5.04</td>
+<td>5.04</td>
+<td>5.00</td>
+<td>4.99</td>
+<td>4.98</td>
+<td>...</td>
+<td>4.96</td>
+<td>4.98</td>
+<td>4.96</td>
+<td>4.97</td>
+<td>4.96</td>
+<td>4.96</td>
+<td>4.96</td>
+<td>4.98</td>
+<td>4.96</td>
+<td>4.99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17D_w</td>
+<td>52.15</td>
+<td>71.30</td>
+<td>77.34</td>
+<td>79.47</td>
+<td>80.85</td>
+<td>81.95</td>
+<td>82.87</td>
+<td>83.61</td>
+<td>84.20</td>
+<td>84.61</td>
+<td>...</td>
+<td>85.48</td>
+<td>85.78</td>
+<td>86.21</td>
+<td>86.86</td>
+<td>87.41</td>
+<td>87.75</td>
+<td>87.95</td>
+<td>88.16</td>
+<td>88.16</td>
+<td>88.29</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17F_b</td>
+<td>5.21</td>
+<td>5.19</td>
+<td>5.15</td>
+<td>5.11</td>
+<td>5.09</td>
+<td>5.06</td>
+<td>5.05</td>
+<td>5.02</td>
+<td>5.00</td>
+<td>5.00</td>
+<td>...</td>
+<td>4.98</td>
+<td>4.99</td>
+<td>5.00</td>
+<td>4.98</td>
+<td>5.00</td>
+<td>4.97</td>
+<td>4.97</td>
+<td>4.99</td>
+<td>4.97</td>
+<td>5.01</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17F_ob</td>
+<td>16.43</td>
+<td>17.41</td>
+<td>18.30</td>
+<td>18.82</td>
+<td>18.94</td>
+<td>18.91</td>
+<td>18.79</td>
+<td>18.18</td>
+<td>17.72</td>
+<td>17.81</td>
+<td>...</td>
+<td>5.43</td>
+<td>5.42</td>
+<td>5.59</td>
+<td>6.41</td>
+<td>8.40</td>
+<td>11.58</td>
+<td>14.59</td>
+<td>16.39</td>
+<td>17.09</td>
+<td>17.15</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17F_ow</td>
+<td>25.91</td>
+<td>32.94</td>
+<td>38.97</td>
+<td>43.55</td>
+<td>46.84</td>
+<td>49.08</td>
+<td>50.78</td>
+<td>49.47</td>
+<td>49.11</td>
+<td>52.31</td>
+<td>...</td>
+<td>6.00</td>
+<td>5.93</td>
+<td>6.18</td>
+<td>7.71</td>
+<td>12.51</td>
+<td>24.22</td>
+<td>42.23</td>
+<td>60.37</td>
+<td>71.99</td>
+<td>77.41</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17F_w</td>
+<td>54.61</td>
+<td>72.62</td>
+<td>78.13</td>
+<td>80.12</td>
+<td>81.59</td>
+<td>82.56</td>
+<td>83.60</td>
+<td>84.25</td>
+<td>84.91</td>
+<td>85.34</td>
+<td>...</td>
+<td>85.59</td>
+<td>85.92</td>
+<td>86.31</td>
+<td>87.13</td>
+<td>87.75</td>
+<td>88.29</td>
+<td>88.43</td>
+<td>88.77</td>
+<td>88.68</td>
+<td>88.88</td>
+</tr>
+</tbody>
+</table>
+
+<p>336 rows × 31 columns</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>spectra.index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>Index(['01A_b', '01A_ob', '01A_ow', '01A_w', '01B_b', '01B_ob', '01B_ow',
+       '01B_w', '01C_b', '01C_ob',
+       ...
+       '17A_ow', '17A_w', '17D_b', '17D_ob', '17D_ow', '17D_w', '17F_b',
+       '17F_ob', '17F_ow', '17F_w'],
+      dtype='object', name='Name', length=336)</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mixture_specs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">01A</td>
+<td>Eosin1Wax-ZincWhite-BoneBlack|100-0-0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">01B</td>
+<td>Eosin1Wax-ZincWhite-BoneBlack|10-90-0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">01C</td>
+<td>Eosin1Wax-ZincWhite-BoneBlack|50-50-0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">02A</td>
+<td>Eosin-ZincWhite-BoneBlack|100-0-0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">02B</td>
+<td>Eosin-ZincWhite-BoneBlack|9.7-90.3-0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">16E</td>
+<td>BariumSulphate-BoneBlack-Cochineal-ViridianGre...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16F</td>
+<td>BariumSulphate-BoneBlack-Cochineal-ViridianGre...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17A</td>
+<td>CalciumCarbonate-BoneBlack-Cochineal-ViridianG...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">17D</td>
+<td>CalciumCarbonate-BoneBlack-Cochineal-ViridianG...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17F</td>
+<td>CalciumCarbonate-BoneBlack-Cochineal-ViridianG...</td>
+</tr>
+</tbody>
+</table>
+
+<p>85 rows × 1 columns</p>
+</div>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Welcome to <code>revigo-spectra</code></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./kmfit.html" class="pagination-link">
+        <span class="nav-page-text">Kubelka-Munk analysis of paint reflectance spectra</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">2023 Rijkserfgoedlaboratorium Amsterdam<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/fligt/revigo-spectra/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

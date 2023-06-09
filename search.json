@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Welcome to revigo-spectra",
+    "section": "",
+    "text": "About the Revigo project."
+  },
+  {
+    "objectID": "index.html#background",
+    "href": "index.html#background",
+    "title": "Welcome to revigo-spectra",
+    "section": "",
+    "text": "About the Revigo project."
+  },
+  {
+    "objectID": "index.html#cite",
+    "href": "index.html#cite",
+    "title": "Welcome to revigo-spectra",
+    "section": "Cite",
+    "text": "Cite\nYou are free to make use of the data and code in this repository. If you use our work in your publications, please cite our article.\n@Article{Geldof_2018,\n  author    = {Geldof, M. and Proaño Gaibor, A. and Kirchner, E. and Ligterink, F.},\n  title     = {Reconstructing Van Gogh’s palette to determine the optical characteristics of his paints},\n  journal   = {Heritage Science},\n  year      = {2018},\n  volume    = {6},\n  number    = {17},\n  pages     = {1--20},\n  doi       = {https://doi.org/10.1186/s40494-018-0181-6},\n  url       = {https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-018-0181-6},\n  },"
+  },
+  {
+    "objectID": "measured-reflectance-spectra.html",
+    "href": "measured-reflectance-spectra.html",
+    "title": "Reflectance spectra",
+    "section": "",
+    "text": "During the Revigo project, we created\n\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\n\nspectra= pd.read_csv('../data/revigo-aggregated-palette-spectral-data.txt', sep='\\t', index_col=0)\nmixture_specs = pd.read_csv('../data/revigo-mixture-specifications.txt', sep='\\t', index_col=0, header=None)\n\n\nspectra\n\n\n\n\n\n\n\n\n400\n410\n420\n430\n440\n450\n460\n470\n480\n490\n...\n610\n620\n630\n640\n650\n660\n670\n680\n690\n700\n\n\nName\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n01A_b\n5.09\n5.09\n5.04\n5.00\n5.00\n4.97\n4.97\n4.93\n4.92\n4.92\n...\n4.91\n4.92\n4.90\n4.92\n4.90\n4.90\n4.89\n4.93\n4.91\n4.93\n\n\n01A_ob\n4.44\n4.43\n4.39\n4.38\n4.35\n4.30\n4.28\n4.21\n4.18\n4.17\n...\n5.29\n5.21\n5.14\n5.11\n5.05\n5.02\n5.00\n4.98\n4.96\n4.97\n\n\n01A_ow\n6.73\n7.97\n8.59\n8.94\n8.54\n7.24\n5.90\n4.87\n4.37\n4.20\n...\n78.19\n79.58\n80.69\n81.99\n82.92\n83.78\n84.35\n84.74\n84.98\n85.39\n\n\n01A_w\n54.83\n72.98\n78.39\n80.16\n81.59\n82.46\n83.58\n83.99\n84.73\n85.18\n...\n85.84\n86.11\n86.53\n87.28\n87.75\n88.20\n88.47\n88.64\n88.56\n88.75\n\n\n01B_b\n5.19\n5.18\n5.12\n5.10\n5.06\n5.04\n5.04\n5.00\n4.99\n4.98\n...\n4.96\n4.98\n4.96\n4.97\n4.96\n4.96\n4.96\n4.98\n4.96\n4.99\n\n\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n...\n\n\n17D_w\n52.15\n71.30\n77.34\n79.47\n80.85\n81.95\n82.87\n83.61\n84.20\n84.61\n...\n85.48\n85.78\n86.21\n86.86\n87.41\n87.75\n87.95\n88.16\n88.16\n88.29\n\n\n17F_b\n5.21\n5.19\n5.15\n5.11\n5.09\n5.06\n5.05\n5.02\n5.00\n5.00\n...\n4.98\n4.99\n5.00\n4.98\n5.00\n4.97\n4.97\n4.99\n4.97\n5.01\n\n\n17F_ob\n16.43\n17.41\n18.30\n18.82\n18.94\n18.91\n18.79\n18.18\n17.72\n17.81\n...\n5.43\n5.42\n5.59\n6.41\n8.40\n11.58\n14.59\n16.39\n17.09\n17.15\n\n\n17F_ow\n25.91\n32.94\n38.97\n43.55\n46.84\n49.08\n50.78\n49.47\n49.11\n52.31\n...\n6.00\n5.93\n6.18\n7.71\n12.51\n24.22\n42.23\n60.37\n71.99\n77.41\n\n\n17F_w\n54.61\n72.62\n78.13\n80.12\n81.59\n82.56\n83.60\n84.25\n84.91\n85.34\n...\n85.59\n85.92\n86.31\n87.13\n87.75\n88.29\n88.43\n88.77\n88.68\n88.88\n\n\n\n\n336 rows × 31 columns\n\n\n\n\nspectra.index\n\nIndex(['01A_b', '01A_ob', '01A_ow', '01A_w', '01B_b', '01B_ob', '01B_ow',\n       '01B_w', '01C_b', '01C_ob',\n       ...\n       '17A_ow', '17A_w', '17D_b', '17D_ob', '17D_ow', '17D_w', '17F_b',\n       '17F_ob', '17F_ow', '17F_w'],\n      dtype='object', name='Name', length=336)\n\n\n\nmixture_specs\n\n\n\n\n\n\n\n\n1\n\n\n0\n\n\n\n\n\n01A\nEosin1Wax-ZincWhite-BoneBlack|100-0-0\n\n\n01B\nEosin1Wax-ZincWhite-BoneBlack|10-90-0\n\n\n01C\nEosin1Wax-ZincWhite-BoneBlack|50-50-0\n\n\n02A\nEosin-ZincWhite-BoneBlack|100-0-0\n\n\n02B\nEosin-ZincWhite-BoneBlack|9.7-90.3-0\n\n\n...\n...\n\n\n16E\nBariumSulphate-BoneBlack-Cochineal-ViridianGre...\n\n\n16F\nBariumSulphate-BoneBlack-Cochineal-ViridianGre...\n\n\n17A\nCalciumCarbonate-BoneBlack-Cochineal-ViridianG...\n\n\n17D\nCalciumCarbonate-BoneBlack-Cochineal-ViridianG...\n\n\n17F\nCalciumCarbonate-BoneBlack-Cochineal-ViridianG...\n\n\n\n\n85 rows × 1 columns"
+  },
+  {
+    "objectID": "kmfit.html",
+    "href": "kmfit.html",
+    "title": "Kubelka-Munk analysis of paint reflectance spectra",
+    "section": "",
+    "text": "More content soon.\nLast updated: ?var:date"
+  }
+]
